@@ -14,6 +14,7 @@ import com.projectit.domain.Cidade;
 import com.projectit.domain.Cliente;
 import com.projectit.domain.Endereco;
 import com.projectit.domain.Estado;
+import com.projectit.domain.ItemPedido;
 import com.projectit.domain.Pagamento;
 import com.projectit.domain.PagamentoComBoleto;
 import com.projectit.domain.PagamentoComCartao;
@@ -26,6 +27,7 @@ import com.projectit.repositories.CidadeRepository;
 import com.projectit.repositories.ClienteRepository;
 import com.projectit.repositories.EnderecoRepository;
 import com.projectit.repositories.EstadoRepository;
+import com.projectit.repositories.ItemPedidoRepository;
 import com.projectit.repositories.PagamentoRepository;
 import com.projectit.repositories.PedidoRepository;
 import com.projectit.repositories.ProdutoRepository;
@@ -49,6 +51,8 @@ public class ProjectitApplication implements CommandLineRunner{
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectitApplication.class, args);
@@ -113,7 +117,19 @@ public class ProjectitApplication implements CommandLineRunner{
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped1.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
-	
 	
 }
